@@ -99,10 +99,10 @@ sub tool {
 				    FROM $table , suggestions
 				    WHERE $table.status LIKE 'pending'
 				    AND $table.suggestionid LIKE suggestions.suggestionid 
-				    AND $table.indentationid LIKE $idd
+				    AND $table.indentationid LIKE ?
 				/;
 				my $sth = $dbh->prepare($pending_indentation_query);
-				$sth->execute();
+				$sth->execute($idd);
 				
 				while ( my $row = $sth->fetchrow_hashref() ) {
 				    push( @idd_list, $row );
