@@ -69,7 +69,7 @@ sub tool {
         my $pending_indentation_query =  qq/
             SELECT DISTINCT $table.indentationid
             FROM $table
-            WHERE status LIKE 'pending'
+            WHERE status LIKE 'indentation generated'
         /;
         my $sth = $dbh->prepare($pending_indentation_query);
         $sth->execute();
@@ -80,41 +80,56 @@ sub tool {
         }
         $template->param( indentation_list => \@indentation_list);
         $self->output_html($template->output());
-        
-        
     }
     else{
-    		
-        	@checked_list = $cgi->multi_param('indent');	
-        
+        @checked_list = $cgi->multi_param('indent');	
 		my $template = $self->get_template({ file => 'tool-step2.tt' });
 		my $dbh = C4::Context->dbh;
 		my $table = "indentation_list_table";
 
 		# fetch all 'checked' indentations
 		my @idd_list;
-			foreach my $idd (@checked_list){
-				my $pending_indentation_query =  qq/
-				    SELECT DISTINCT $table.indentationid, suggestions.suggestionid, suggestions.author, suggestions.title, suggestions.publicationyear
-				    FROM $table , suggestions
-				    WHERE $table.status LIKE 'pending'
-				    AND $table.suggestionid LIKE suggestions.suggestionid 
-				    AND $table.indentationid LIKE ?
-				/;
-				my $sth = $dbh->prepare($pending_indentation_query);
-				$sth->execute($idd);
-				
-				while ( my $row = $sth->fetchrow_hashref() ) {
-				    push( @idd_list, $row );
-				}
-			}
+        foreach my $idd (@checked_list){
+            my $pending_indentation_query =  qq/
+                SELECT DISTINCT $table.indentationid, suggestions.suggestionid, suggestions.author, suggestions.title, suggestions.publicationyear
+                FROM $table , suggestions
+                WHERE $table.status LIKE 'indentation generated'
+                AND $table.suggestionid LIKE suggestions.suggestionid 
+                AND $table.indentationid LIKE ?
+            /;
+            my $sth = $dbh->prepare($pending_indentation_query);
+            $sth->execute($idd);
+            
+            while ( my $row = $sth->fetchrow_hashref() ) {
+                push( @idd_list, $row );
+            }
+        }
+        
+        #update indentation list status
+        foreach my $idd (@idd_list){
+            my $status_indentation_query =  qq/
+                UPDATE $table
+                SET status = 'qoutation generated'
+                WHERE indentationid LIKE ?
+            /;
+            my $sth = $dbh->prepare($status_indentation_query);
+            $sth->execute($idd->{indentationid});
+
+            my $update_status =  qq/
+                UPDATE suggestions
+                SET STATUS = 'ACCEPTED'
+                WHERE suggestionid LIKE ?
+            /;
+            my $sth1 = $dbh->prepare($update_status);
+            $sth1->execute($idd->{suggestionid});
+        }
 			
 		
 		
 		
-        	$template->param( indentation_list => \@idd_list);
-       	 $self->output_html($template->output());
-         }
+        $template->param( indentation_list => \@idd_list);
+       	$self->output_html($template->output());
+    }
 }
 
 
