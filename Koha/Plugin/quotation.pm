@@ -91,7 +91,7 @@ sub tool {
 		my @idd_list;
         foreach my $idd (@checked_list){
             my $pending_indentation_query =  qq/
-                SELECT DISTINCT $table.indentationid, suggestions.suggestionid, suggestions.author, suggestions.title, suggestions.publicationyear
+                SELECT DISTINCT $table.indentationid, suggestions.suggestionid, suggestions.author, suggestions.title, suggestions.publicationyear, suggestions.quantity, suggestions.publishercode
                 FROM $table , suggestions
                 WHERE $table.status LIKE 'indentation generated'
                 AND $table.suggestionid LIKE suggestions.suggestionid 
