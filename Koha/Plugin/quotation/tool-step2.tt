@@ -38,9 +38,16 @@
                     <table class="indentation list">
                     <thead>
                     <tr>
-                    	<th>Indentation ID</th>
+                    	<th>Indent No.</th>
                     	<th>Author</th>
                     	<th>Title</th>
+                     <th>Ed/Year</th>
+                     <th>Publisher</th>
+                     <th>List Price of the Book (Single Copy)</th>
+                     <th>Conversion Rate</th>
+                     <th>Discount</th>
+                     <th>QTY</th>
+                     <th>Total Price (INR)</th>
                     </tr>
                     </thead>
                     
@@ -51,6 +58,14 @@
                      	     <td> [% indentation.indentationid %] </td>
                      	     <td> [% indentation.author %]> </td>
                      	     <td> [% indentation.title %] </td>
+                           <td> [% indentation.publicationyear %] </td>
+                           <td> [% indentation.publishercode %] </td>
+                           <td>  </td>
+                           <td>  </td>
+                           <td>  </td>
+                           <td> [% indentation.quantity %] </td>
+                           <td>  </td>
+                           
                      </tr>
                      [% END %]
                    
