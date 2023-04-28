@@ -1,0 +1,93 @@
+[% INCLUDE 'doc-head-open.inc' %]
+ <title>Koha: Quotation </title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs">
+<a href="/cgi-bin/koha/mainpage.pl">Home</a> 
+&rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> 
+&rsaquo; Quotations 
+&rsaquo; Select Indent
+&rsaquo; Quotation Generation
+</div>
+
+<div class="main container-fluid" id="table-conatainer" >
+
+    <p>
+        <form>
+            <input type="button" value="Create Excel" onclick="exportToExcel()">
+        </form>
+    </p>
+    <div class="col-sm-10 col-sm-push-2">
+            <main>
+        
+                <h3>Koha: Quotation</h3>
+                    
+                <!-- Notice our form here has no 'action', this is good, it means that our forms will always get passed back to 'plugins/run.pl'. You could hard code it instead if you prefer -->
+                <form method="get">
+                    <!-- Always pass these two parameters so the plugin system knows what to execute! -->
+                    <input type="hidden" name="class" value="[% CLASS | html %]"/>
+                    <input type="hidden" name="method" value="[% METHOD | html %]"/>
+                    
+                    <table class="indentation list">
+                    <thead>
+                    <tr>
+                    	<th>Indent No.</th>
+                    	<th>Author</th>
+                    	<th>Title</th>
+                     <th>Ed/Year</th>
+                     <th>Publisher</th>
+                     <th>List Price of the Book (Single Copy)</th>
+                     <th>Conversion Rate</th>
+                     <th>Discount</th>
+                     <th>QTY</th>
+                     <th>Total Price (INR)</th>
+                    </tr>
+                    </thead>
+                    
+                    <tbody>
+                    
+                     [% FOREACH indentation IN indentation_list %]
+                     <tr>
+                     	     <td> [% indentation.indentationid %] </td>
+                     	     <td> [% indentation.author %]> </td>
+                     	     <td> [% indentation.title %] </td>
+                           <td> [% indentation.publicationyear %] </td>
+                           <td> [% indentation.publishercode %] </td>
+                           <td>  </td>
+                           <td>  </td>
+                           <td>  </td>
+                           <td> [% indentation.quantity %] </td>
+                           <td>  </td>
+                           
+                     </tr>
+                     [% END %]                                     	
+                    </tbody>
+                    </table>
+                    
+                </form>
+            </main>
+        </div>
+        <script>
+        function exportToExcel() {
+                var location = 'data:application/vnd.ms-excel;base64,';
+                var excelTemplate = '<html> ' +
+                    '<head> ' +
+                    '<meta http-equiv="content-type" content="text/plain; charset=UTF-8"/> ' +
+                    '</head> ' +
+                    '<body> ' +
+                    document.getElementById("table-conatainer").innerHTML +
+                    '</body> ' +
+                    '</html>'
+                window.location.href = location + window.btoa(excelTemplate);
+            }
+        </script>
+<\div>
+
+[% INCLUDE 'intranet-bottom.inc' %]
