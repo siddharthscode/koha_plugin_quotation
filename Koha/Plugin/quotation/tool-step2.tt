@@ -67,7 +67,8 @@
             var data = [
               ["Vendor Name", , , , "Quotation Address to: Dy. Librarian, Indian Institute of Technology Hyderabad, Kandi, Sangareddy, Medak (District) - PIN-502284, Telangana, India", , , , , , ],
               [ , , , , , , , , , , ],
-              [ "Indent No. & Date", , indentation_list[0].indentationid, , "Vendor Quotation No & Date", , , , , , ],
+              [ , , , , , , , , , , ],
+              [ "Indent No. & Date", , , , "Vendor Quotation No & Date", , , , , , ],
               [ "SL.No", "Indent. NO", "Author", "Title", "Ed/Year", "Publisher", "List Price of the Book (Single Copy)", "Conversion Rate", "Discount", "QTY", "Total Price (INR)"],
 
             ];
